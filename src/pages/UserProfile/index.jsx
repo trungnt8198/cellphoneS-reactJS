@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { object, string } from "yup";
+import { mixed, object, string } from "yup";
 import Button from "../../components/Button";
 import Loading from "../../components/Loading";
 import useDebounce from "../../hooks/Debounce";
@@ -36,6 +36,17 @@ const userSchema = object({
     .matches(phoneRegex, "Phải đúng định dạng số điện thoại")
     .notRequired()
     .nullable(),
+  image: mixed()
+    .notRequired()
+    .nullable()
+    .test("fileSize", "Ảnh không vượt quá 5MB", (value) => {
+      if (!value || !(value instanceof File)) return true;
+      return value.size <= 5 * 1024 * 1024;
+    })
+    .test("fileType", "Ảnh phải có dạng: jpeg, jpg, png", (value) => {
+      if (!value || !(value instanceof File)) return true;
+      return ["image/jpeg", "image/jpg", "image/png"].includes(value.type);
+    }),
 });
 
 function UserProfile() {
@@ -46,7 +57,6 @@ function UserProfile() {
   const [searchedUser, setSearchedUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState("");
-  const [avatar, setAvatar] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
 
   useEffect(() => {
@@ -79,11 +89,13 @@ function UserProfile() {
     watch,
     trigger,
     setError,
+    setValue,
     formState: { errors, isDirty, dirtyFields, isValidating },
   } = useForm({
     resolver: yupResolver(userSchema),
     mode: "onChange",
     values: {
+      image: null,
       username: searchedUser?.username || "",
       firstName: searchedUser?.firstName || "",
       lastName: searchedUser?.lastName || "",
@@ -150,11 +162,6 @@ function UserProfile() {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-
-    if (avatar instanceof File) {
-      formData.append("image", avatar);
-    }
-
     Object.keys(data).forEach((key) => {
       data[key] && formData.append(key, data[key]);
     });
@@ -177,23 +184,10 @@ function UserProfile() {
 
   const handleSelectImage = (e) => {
     const image = e.target.files[0];
-    if (image?.size > 5 * 1024 * 104) {
-      setError("image", {
-        type: "manual",
-        message: "Ảnh không vượt quá 5MB",
-      });
-      return;
+    if (image) {
+      setValue("image", image, { shouldValidate: true, shouldDirty: true });
+      setPreview(URL.createObjectURL(image));
     }
-    if (!["image/jpeg", "image/jpg", "image/png"].includes(image?.type)) {
-      setError("image", {
-        type: "manual",
-        message: "Ảnh phải có dạng: jpeg, jpg, png",
-      });
-      return;
-    }
-    clearErrors("image");
-    setAvatar(image);
-    setPreview(URL.createObjectURL(image));
   };
 
   if (loading) {
@@ -205,10 +199,9 @@ function UserProfile() {
   }
 
   const hasError = Object.keys(errors).length > 0;
-  const dirty = Object.keys(dirtyFields).length > 0;
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (hasError || dirty) return;
+    if (hasError || !isDirty) return;
     const handle = handleSubmit(onSubmit);
     return handle(e);
   };
