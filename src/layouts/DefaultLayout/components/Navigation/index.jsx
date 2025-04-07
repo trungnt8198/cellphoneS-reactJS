@@ -13,7 +13,7 @@ import { useUser } from "../../../../hooks/useUser";
 import { logout } from "../../../../services/authService";
 import httpRequest from "../../../../utils/httpRequest";
 import style from "./Navigation.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Navigation() {
   const navigate = useNavigate();

@@ -10,8 +10,8 @@ export const UserProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await getCurrentUser("/api/user");
-      setUser(response.user);
+      const response = await getCurrentUser();
+      setUser(response.data);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
     } finally {

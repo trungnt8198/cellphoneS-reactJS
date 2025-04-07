@@ -4,14 +4,18 @@ const httpRequest = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
   },
 });
 
 const send = async (method, url, data, config) => {
+  const isPutOrPatch = ["put", "patch"].includes(method.toLowerCase());
+  const effectiveMethod = isPutOrPatch ? "post" : method;
+  const effectivePath = isPutOrPatch
+    ? `${url}${url.includes("?") ? "&" : "?"}_method=${method}`
+    : url;
   const response = await httpRequest.request({
-    method,
-    url,
+    method: effectiveMethod,
+    url: effectivePath,
     data,
     ...config,
   });
@@ -25,7 +29,7 @@ export const get = (url, config) => {
 };
 
 export const post = (url, data, config) => {
-  return send("post", url, JSON.stringify(data), config);
+  return send("post", url, data, config);
 };
 
 export const put = (url, data, config) => {

@@ -5,11 +5,6 @@ export const getCurrentUser = async () => {
   return response;
 };
 
-export const getUser = async (idOrUsername) => {
-  const response = await httpRequest.get(`/auth/users/${idOrUsername}`);
-  return response;
-};
-
 export const login = async (request) => {
   const response = await httpRequest.post("/auth/login", request);
   return response;
@@ -25,7 +20,24 @@ export const logout = async () => {
   return response;
 };
 
-export const checkEmail = async (email) => {
-  const response = await httpRequest.get(`/auth/check-email?email=${email}`);
+export const checkEmail = async (email, excludeId = undefined) => {
+  const excludedIdParam = excludeId ? `&exclude_id=${excludeId}` : "";
+  const response = await httpRequest.get(
+    `/auth/check-email?email=${email}${excludedIdParam}`
+  );
+  return response;
+};
+
+export const checkPhone = async (phone, excludeId) => {
+  const response = await httpRequest.get(
+    `/auth/check-phone?phone=${phone}&exclude_id=${excludeId}`
+  );
+  return response;
+};
+
+export const checkUsername = async (username, excludeId) => {
+  const response = await httpRequest.get(
+    `/auth/check-username?username=${username}&exclude_id=${excludeId}`
+  );
   return response;
 };

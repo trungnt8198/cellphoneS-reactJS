@@ -7,8 +7,9 @@ import Button from "../../components/Button";
 import config from "../../config";
 import * as authService from "../../services/authService";
 import httpRequest from "../../utils/httpRequest";
+import useCheckExisted from "../../hooks/CheckExisted";
+import { checkEmail } from "../../services/authService";
 
-let timer;
 const userSchema = object({
   fullName: string().min(1).required("Không được bỏ trống"),
   password: string().min(8).required("Không được bỏ trống"),
@@ -71,26 +72,11 @@ function Register() {
 
   const emailValue = watch("email");
 
+  const checkExisted = useCheckExisted(trigger, setError);
+
   useEffect(() => {
-    if (!emailValue) return;
-    clearTimeout(timer);
-    timer = setTimeout(async () => {
-      const validEmail = await trigger("email");
-      if (validEmail) {
-        try {
-          const response = await authService.checkEmail(emailValue);
-          if (response.exists) {
-            setError("email", {
-              type: "manual",
-              message: "Email đã được sử dụng",
-            });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }, 800);
-  }, [emailValue, trigger, setError]);
+    checkExisted("email", emailValue, checkEmail, "Email này đã được sử dụng");
+  }, [emailValue, trigger, setError, checkExisted]);
 
   return (
     <div>

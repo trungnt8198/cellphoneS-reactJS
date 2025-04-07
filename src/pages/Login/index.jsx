@@ -6,11 +6,14 @@ import Button from "../../components/Button";
 import { object, string } from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { getCurrentUser, login } from "../../services/authService";
+import { useUser } from "../../hooks/useUser";
 
 function Login() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { setUser } = useUser();
 
   const userSchema = object({
     password: string().min(8).required("Không được bỏ trống"),
@@ -35,8 +38,10 @@ function Login() {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await httpRequest.post("/auth/login", data);
-      httpRequest.setToken(response.access_token);
+      let response = await login(data);
+      httpRequest.setToken(response.data.access_token);
+      response = await getCurrentUser();
+      setUser(response.data);
       navigate(params.get("continue") || config.routes.home);
     } catch (err) {
       if (err.status === 401) {

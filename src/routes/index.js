@@ -1,5 +1,6 @@
 import config from "../config";
 import AdminLayout from "../layouts/AdminLayout";
+import NoFooterLayout from "../layouts/NoFooterLayout";
 import AdminProducts from "../pages/AdminProducts";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -41,6 +42,7 @@ const routes = [
   {
     path: config.routes.userProfile,
     component: UserProfile,
+    layout: NoFooterLayout,
   },
   {
     path: config.routes.notFound,
