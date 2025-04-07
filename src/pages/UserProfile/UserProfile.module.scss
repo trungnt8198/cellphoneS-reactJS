@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.formWrapper {
+  margin: 30px auto;
+  input,
+  select {
+    width: 200px;
+  }
+
+  button {
+    margin-top: 10px;
+  }
+}
+
+.fieldsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.avatarWrapper {
+  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+  border: 1px solid #ccc;
+}
+
+.avatarPreview {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+}
+
+.error {
+  color: red;
+}
