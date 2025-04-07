@@ -321,7 +321,7 @@ function UserProfile() {
           <Button
             type="submit"
             loading={updateLoading}
-            disabled={isDirty || hasError || isValidating}
+            disabled={!isDirty || hasError || isValidating}
           >
             Lưu thông tin
           </Button>
