@@ -6,6 +6,7 @@ const useCheckExisted = (trigger, setError, user = undefined) => {
     async (inputName, inputValue, checkExistedFunc, message) => {
       if (inputValue) {
         const valid = await trigger(inputName);
+        if (!valid) return;
         if (valid) {
           try {
             const response = await checkExistedFunc(inputValue, user?.id);

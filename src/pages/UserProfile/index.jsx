@@ -125,7 +125,9 @@ function UserProfile() {
         "Email này đã được sử dụng !"
       );
     }
+  }, [checkExisted, debouncedEmail, dirtyFields.email]);
 
+  useEffect(() => {
     if (dirtyFields.username && debouncedUsername) {
       checkExisted(
         "username",
@@ -134,7 +136,9 @@ function UserProfile() {
         "Username này đã được sử dụng !"
       );
     }
+  }, [checkExisted, debouncedUsername, dirtyFields.username]);
 
+  useEffect(() => {
     if (dirtyFields.phone && debouncedPhone) {
       checkExisted(
         "phone",
@@ -143,16 +147,7 @@ function UserProfile() {
         "Số điện thoại này đã được sử dụng !"
       );
     }
-  }, [
-    debouncedEmail,
-    debouncedPhone,
-    debouncedUsername,
-    setError,
-    trigger,
-    user,
-    dirtyFields,
-    checkExisted,
-  ]);
+  }, [debouncedPhone, dirtyFields.phone, checkExisted]);
 
   useEffect(() => {
     return () => {
@@ -303,6 +298,7 @@ function UserProfile() {
             onClick={() => {
               clearErrors();
               reset();
+              setPreview(null);
               setEditing(!editing);
             }}
           >
