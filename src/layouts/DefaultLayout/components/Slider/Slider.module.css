@@ -1,0 +1,17 @@
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #e9efff;
+  max-height: 40px;
+  overflow: hidden;
+  padding: 5px;
+  --swiper-navigation-size: 30px;
+}
+
+.slide__image {
+  display: block;
+  margin: auto;
+  min-height: 30px;
+}/*# sourceMappingURL=Slider.module.css.map */

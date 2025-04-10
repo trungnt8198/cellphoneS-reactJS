@@ -1,0 +1,8 @@
+.wrapper {
+  display: flex;
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+}/*# sourceMappingURL=Navigation.module.css.map */

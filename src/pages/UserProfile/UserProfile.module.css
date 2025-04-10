@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.formWrapper {
+  margin: 30px auto;
+}
+.formWrapper input,
+.formWrapper select {
+  width: 200px;
+}
+.formWrapper button {
+  margin-top: 10px;
+}
+
+.fieldsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.avatarWrapper {
+  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+  border: 1px solid #ccc;
+}
+
+.avatarPreview {
+  width: inherit;
+  height: inherit;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.error {
+  color: red;
+}/*# sourceMappingURL=UserProfile.module.css.map */
